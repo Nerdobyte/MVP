@@ -437,7 +437,7 @@ if not st.session_state.consent_given:
         If you remain dissatisfied, you have the right to lodge a complaint with the ICO at https://ico.org.uk/concerns/.
         """)
         
-        if st.button("✅ I Agree"):
+        if st.button("✅ I Agree (Double-Click)"):
             # Mark consent in session_state
             st.session_state.consent_given = True
 
