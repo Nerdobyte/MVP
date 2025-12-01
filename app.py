@@ -17,6 +17,9 @@ from firebase_admin import credentials, initialize_app, db
 from dotenv import load_dotenv
 load_dotenv()
 
+import json
+import tempfile
+
 # ---------------------------
 # Anonymous voter ID per browser
 # ---------------------------
@@ -47,7 +50,7 @@ import streamlit as st
 
 # Use secrets instead of local env vars
 try:
-    firebase_json_str = st.secrets["FIREBASE"]["CREDENTIALS_JSON"].replace("\n", "")
+    firebase_json_str = st.secrets["FIREBASE"]["CREDENTIALS_JSON"]
     firebase_creds = json.loads(firebase_json_str)
     firebase_db_url = st.secrets["FIREBASE"]["DATABASE_URL"]
 except KeyError:
@@ -82,17 +85,33 @@ def trigger_refresh():
 # ---------------------------
 # Firebase helpers
 # ---------------------------
+
 def init_firebase():
+    # Avoid re-initializing if already done
     if firebase_admin._apps:
         return
+
     try:
-        cred = credentials.Certificate(st.secrets["FIREBASE"]["CREDENTIALS_JSON"])
-        db_url = st.secrets["FIREBASE"]["DATABASE_URL"]
+        # Load secrets
+        firebase_json = st.secrets["FIREBASE"]["CREDENTIALS_JSON"]
+        firebase_db_url = st.secrets["FIREBASE"]["DATABASE_URL"]
     except KeyError:
-        st.error("Firebase secrets not found! Configure them in Streamlit Cloud.")
+        st.error("Firebase secrets not found! Make sure they are configured in Streamlit Cloud.")
         st.stop()
-    
-    firebase_admin.initialize_app(cred, {"databaseURL": db_url})
+
+    # If the secret is a dictionary, convert to JSON string
+    if isinstance(firebase_json, dict):
+        firebase_json_str = json.dumps(firebase_json)
+    else:
+        firebase_json_str = firebase_json
+
+    # Write to a temporary file and initialize
+    with tempfile.NamedTemporaryFile(mode="w+", suffix=".json") as f:
+        f.write(firebase_json_str)
+        f.flush()  # make sure all data is written
+        cred = credentials.Certificate(f.name)
+        firebase_admin.initialize_app(cred, {"databaseURL": firebase_db_url})
+
 
 def get_db_ref(path="/"):
     return db.reference(path)
