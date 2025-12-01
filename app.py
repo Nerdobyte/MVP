@@ -351,13 +351,17 @@ def render_tool_row(tool_row, section_id=None, context=""):
 
     # Input for new comment
     with st.expander("Leave a comment"):
-        new_comment = st.text_area(f"Comment for {tool_row['name']}", key=f"comment_input_{tool_row['tool_id']}", height=50)
+        new_comment = st.text_area(
+            f"Comment for {tool_row['name']}",
+            key=f"comment_input_{context}_{section_id}_{tool_row['tool_id']}_{VOTER_ID}",
+            height=50
+        )
         comment_type = st.radio(
             "Type",
             ["pro", "con", "neutral"],
             index=2,
             horizontal=True,
-            key=f"comment_type_{tool_row['tool_id']}"
+            key=f"comment_type_{context}_{section_id}_{tool_row['tool_id']}_{VOTER_ID}"
         )
         if st.button("Submit", key=f"submit_comment_{tool_row['tool_id']}"):
             if new_comment.strip():
@@ -732,13 +736,17 @@ with tabs[5]:
 
         # Add new comment
         with st.expander("Leave a comment"):
-            new_comment = st.text_area(f"Comment for {tool['name']}", key=f"comment_input_{selected_tool_id}", height=50)
+            new_comment = st.text_area(
+                f"Comment for {tool['name']}",
+                key=f"comment_input_comments_{selected_tool_id}_{VOTER_ID}",
+                height=50
+            )
             comment_type = st.radio(
                 "Type",
                 ["pro", "con", "neutral"],
                 index=2,
                 horizontal=True,
-                key=f"comment_type_{selected_tool_id}"
+                key=f"comment_type_comments_{selected_tool_id}_{VOTER_ID}"
             )
             if st.button("Submit", key=f"submit_comment_{selected_tool_id}"):
                 if new_comment.strip():
