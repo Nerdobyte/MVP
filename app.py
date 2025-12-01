@@ -351,17 +351,13 @@ def render_tool_row(tool_row, section_id=None, context=""):
 
     # Input for new comment
     with st.expander("Leave a comment"):
-        new_comment = st.text_area(
-            f"Comment for {tool_row['name']}",
-            key=f"comment_input_{context}_{section_id}_{tool_row['tool_id']}_{VOTER_ID}",
-            height=50
-        )
+        new_comment = st.text_area(f"Comment for {tool_row['name']}", key=f"comment_input_{tool_row['tool_id']}", height=50)
         comment_type = st.radio(
             "Type",
             ["pro", "con", "neutral"],
             index=2,
             horizontal=True,
-            key=f"comment_type_{context}_{section_id}_{tool_row['tool_id']}_{VOTER_ID}"
+            key=f"comment_type_{tool_row['tool_id']}"
         )
         if st.button("Submit", key=f"submit_comment_{tool_row['tool_id']}"):
             if new_comment.strip():
@@ -514,6 +510,37 @@ st_autorefresh(interval=poll_interval*1000, key="refresh_counter")
 tools_dict = list_all_tools_dict()
 sections_dict = list_all_sections_dict()
 tools_df = tools_df_from_db(tools_dict, sections_dict)
+
+# ---------------------------
+# Voting Helper
+# ---------------------------
+def render_tool_row(tool_row, section_id=None, context=""):
+    """
+    Render a single tool row with voting buttons that auto-update score
+    without full page refresh.
+    """
+    unique_key = f"{context}_{tool_row['tool_id']}_{section_id}"
+
+    # Ensure session_state keys exist
+    up_key = f"up_{unique_key}"
+    down_key = f"down_{unique_key}"
+    score_key = f"score_{unique_key}"
+
+    if score_key not in st.session_state:
+        st.session_state[score_key] = compute_score(tool_row)
+
+    c_name, c_tags, c_score, c_up, c_down = st.columns([3,2,1,1,1])
+    c_name.write(f"**{tool_row['name']}**")
+    c_tags.write(tool_row['tags'])
+    c_score.write(st.session_state[score_key])
+
+    if c_up.button("👍", key=up_key):
+        increment_counter_atomic(f"/tools/{tool_row['tool_id']}/upvotes", 1)
+        st.session_state[score_key] += 1
+
+    if c_down.button("👎", key=down_key):
+        increment_counter_atomic(f"/tools/{tool_row['tool_id']}/downvotes", 1)
+        st.session_state[score_key] -= 1
 
 # ---------------------------
 # Tabs
@@ -736,17 +763,13 @@ with tabs[5]:
 
         # Add new comment
         with st.expander("Leave a comment"):
-            new_comment = st.text_area(
-                f"Comment for {tool['name']}",
-                key=f"comment_input_comments_{selected_tool_id}_{VOTER_ID}",
-                height=50
-            )
+            new_comment = st.text_area(f"Comment for {tool['name']}", key=f"comment_input_{selected_tool_id}", height=50)
             comment_type = st.radio(
                 "Type",
                 ["pro", "con", "neutral"],
                 index=2,
                 horizontal=True,
-                key=f"comment_type_comments_{selected_tool_id}_{VOTER_ID}"
+                key=f"comment_type_{selected_tool_id}"
             )
             if st.button("Submit", key=f"submit_comment_{selected_tool_id}"):
                 if new_comment.strip():
