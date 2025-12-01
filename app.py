@@ -47,7 +47,8 @@ import streamlit as st
 
 # Use secrets instead of local env vars
 try:
-    firebase_creds = json.loads(st.secrets["FIREBASE"]["CREDENTIALS_JSON"])
+    firebase_json_str = st.secrets["FIREBASE"]["CREDENTIALS_JSON"].replace("\n", "")
+    firebase_creds = json.loads(firebase_json_str)
     firebase_db_url = st.secrets["FIREBASE"]["DATABASE_URL"]
 except KeyError:
     st.error("Firebase secrets not found! Make sure you configured them in Streamlit Cloud.")
