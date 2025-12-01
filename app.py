@@ -512,37 +512,6 @@ sections_dict = list_all_sections_dict()
 tools_df = tools_df_from_db(tools_dict, sections_dict)
 
 # ---------------------------
-# Voting Helper
-# ---------------------------
-def render_tool_row(tool_row, section_id=None, context=""):
-    """
-    Render a single tool row with voting buttons that auto-update score
-    without full page refresh.
-    """
-    unique_key = f"{context}_{tool_row['tool_id']}_{section_id}"
-
-    # Ensure session_state keys exist
-    up_key = f"up_{unique_key}"
-    down_key = f"down_{unique_key}"
-    score_key = f"score_{unique_key}"
-
-    if score_key not in st.session_state:
-        st.session_state[score_key] = compute_score(tool_row)
-
-    c_name, c_tags, c_score, c_up, c_down = st.columns([3,2,1,1,1])
-    c_name.write(f"**{tool_row['name']}**")
-    c_tags.write(tool_row['tags'])
-    c_score.write(st.session_state[score_key])
-
-    if c_up.button("👍", key=up_key):
-        increment_counter_atomic(f"/tools/{tool_row['tool_id']}/upvotes", 1)
-        st.session_state[score_key] += 1
-
-    if c_down.button("👎", key=down_key):
-        increment_counter_atomic(f"/tools/{tool_row['tool_id']}/downvotes", 1)
-        st.session_state[score_key] -= 1
-
-# ---------------------------
 # Tabs
 # ---------------------------
 tabs = st.tabs([
