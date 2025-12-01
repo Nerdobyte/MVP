@@ -57,7 +57,7 @@ except KeyError:
     st.error("Firebase secrets not found! Make sure you configured them in Streamlit Cloud.")
     st.stop()
 
-STREAMLIT_APP_URL = st.secrets.get("https://spatial-mvp.streamlit.app/")
+STREAMLIT_APP_URL = "https://spatial-mvp.streamlit.app/"
 POLL_INTERVAL_SECONDS = int(st.secrets.get("POLL_INTERVAL_SECONDS", 30))
 
 SECTION_MAPPING = {
