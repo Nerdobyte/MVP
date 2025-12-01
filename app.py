@@ -57,7 +57,7 @@ except KeyError:
     st.error("Firebase secrets not found! Make sure you configured them in Streamlit Cloud.")
     st.stop()
 
-STREAMLIT_APP_URL = st.secrets.get("APP_URL")
+STREAMLIT_APP_URL = st.secrets.get("APP_URL", "http://localhost:8501")
 POLL_INTERVAL_SECONDS = int(st.secrets.get("POLL_INTERVAL_SECONDS", 30))
 
 SECTION_MAPPING = {
