@@ -494,13 +494,13 @@ with st.sidebar:
     st.markdown("---")
     poll_interval = st.number_input("Auto-refresh interval (sec)", min_value=1, max_value=30, value=POLL_INTERVAL_SECONDS)
     st.markdown("---")
-    #st.write("Admin:")
-    #if st.button("Reset DB to defaults"):
-    #    root = get_db_ref("/")
-    #    root.child("sections").delete()
-    #    root.child("tools").delete()
-    #    seed_defaults_from_excel("tools.csv")
-    #    st.success("Reset DB and reseeded defaults.")
+    st.write("Admin:")
+    if st.button("Reset DB to defaults"):
+        root = get_db_ref("/")
+        root.child("sections").delete()
+        root.child("tools").delete()
+        seed_defaults_from_excel("tools.csv")
+        st.success("Reset DB and reseeded defaults.")
 
 # --- Auto-refresh ---
 from streamlit_autorefresh import st_autorefresh
