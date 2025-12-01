@@ -370,7 +370,7 @@ def render_tool_row(tool_row, section_id=None, context=""):
 # ---------------------------
 # Streamlit Page Setup
 # ---------------------------
-st.set_page_config(page_title="Spatial Multiomics Tools Leaderboard", layout="wide")
+st.set_page_config(page_title="Spatial Multiomics Voting Platform", layout="wide")
 
 # --- Consent ---
 # Ensure consent state exists
@@ -449,8 +449,8 @@ if not st.session_state.consent_given:
     st.stop()  # block everything else until consent is given
 
 
-st.title("Spatial Multiomics Tools Leaderboard — Live @ Conference")
-st.markdown("#### 🧠 Presented at [BSI Congress 2025](https://www.bsicongress.com)")
+st.title("Spatial Multiomics Voting Platform — Live @ Conference")
+st.markdown("#### 🧠 A Platform for Spatial's Most Valuable Players... Presented at [BSI Congress 2025](https://www.bsicongress.com)")
 
 # --- Firebase init & seeding ---
 try:
@@ -488,7 +488,7 @@ tools_df = tools_df_from_db(tools_dict, sections_dict)
 
 # --- Sidebar ---
 with st.sidebar:
-    st.header("Share & Controls")
+    st.header("Share:")
     st.image(render_qr(STREAMLIT_APP_URL), width=160)
     #st.write(f"App URL: {STREAMLIT_APP_URL}")
     st.markdown("---")
