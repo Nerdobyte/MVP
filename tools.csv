@@ -1,0 +1,60 @@
+﻿Tool name,Segmentation,Clustering,Visualization,Integration,Domain_detection,Upscaling,Annotation
+ADEPT,0,1,0,0,0,1,0
+banksy,0,0,1,1,0,0,0
+BASS,0,1,1,1,1,0,0
+BayesSpace,0,1,0,0,1,0,0
+Baysor,1,0,0,0,0,0,0
+Bento,0,0,1,0,0,0,1
+BoReMi,0,1,0,0,0,0,0
+CellAgentChat,0,0,0,0,0,0,1
+Cellcharter,0,1,1,1,1,0,0
+Cellpose,1,0,0,0,0,0,1
+CellProfiler,1,0,1,0,0,0,1
+CellSymphony,0,1,0,0,1,0,1
+COMMOT,0,0,0,0,0,0,1
+DeepST,0,1,1,1,1,0,0
+DR.SC,0,1,1,0,1,0,0
+Giotto,0,1,1,1,1,0,0
+GPSA,0,0,0,1,0,1,0
+GraphST,0,1,1,1,1,0,0
+GROVER,0,0,0,1,0,0,0
+HEIST,0,1,0,0,1,0,1
+InSituPy,0,1,1,1,0,0,0
+iSCALE,1,0,0,1,1,0,0
+KBC (Kernel-bounded Clustering),0,1,0,0,1,0,0
+LeGO-3D / LeGO-3D imaging pipeline,1,0,1,0,0,1,0
+LIANA / LIANA+,0,0,0,1,0,0,0
+LLOT,0,1,0,1,1,1,0
+MagNet,0,0,0,0,0,1,0
+MISTy / mistyR,0,0,0,0,1,0,0
+MOFA / MOFA+ / MEFISTO,0,1,0,1,0,0,0
+MOSAIK,1,0,0,1,1,0,0
+MuSpAn (MuSpAn),0,1,1,1,1,0,0
+Niche-DE,0,0,0,0,1,0,0
+Nicheformer,0,1,0,0,1,0,0
+PASTE,0,0,0,1,0,1,0
+PASTE2,0,0,0,1,0,1,0
+PersiST,0,0,0,1,0,0,0
+PHD-MS,0,1,0,0,1,0,0
+PRECAST,0,1,1,1,1,0,0
+scGPT-spatial / scGPT,0,1,1,1,0,1,1
+scvi-tools / scVI / scANVI,0,1,1,1,0,0,1
+Segger,1,0,0,0,0,0,0
+SemST (When Genes Speak),0,1,0,0,0,0,0
+SPAC,0,0,1,1,0,0,0
+SPACEL,0,0,1,1,0,0,0
+SpaGCN,0,1,1,1,1,0,0
+SPIRAL,0,0,0,1,0,0,0
+SpOOx (SpOOx / SpOOx pipeline),1,1,1,0,0,0,0
+ST‑Align,0,1,1,0,0,0,0
+STAGATE,0,1,1,0,1,0,0
+STAligner,0,0,0,1,0,0,0
+stardist,1,0,1,0,0,0,1
+stLearn,0,1,1,1,1,0,0
+STtools,0,1,1,0,0,0,0
+Tangram,0,0,0,1,0,1,1
+TensionMap,0,0,1,0,0,0,0
+Thor,0,1,1,1,0,0,1
+TopoVelo,0,1,0,0,1,0,0
+VoxelEmbed,1,1,1,1,1,1,1
+Cell2Spatial,0,1,1,1,1,0,1

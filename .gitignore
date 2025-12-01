@@ -1,0 +1,12 @@
+# Secrets
+firebase-key.json
+serviceAccountKey.json
+*.env
+
+# Python
+__pycache__/
+*.pyc
+
+# OS junk
+.DS_Store
+
