@@ -2,6 +2,9 @@
 firebase-key.json
 serviceAccountKey.json
 *.env
+app_backup*.py
+notes.txt
+sp_toolbox.yaml
 
 # Python
 __pycache__/

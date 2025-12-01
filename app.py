@@ -11,7 +11,7 @@ import qrcode
 
 # Firebase admin
 import firebase_admin
-from firebase_admin import credentials, db
+from firebase_admin import credentials, initialize_app, db
 
 # Auto load .env
 from dotenv import load_dotenv
@@ -41,10 +41,20 @@ VOTER_ID = get_browser_voter_id()
 # ---------------------------
 # Config / Constants
 # ---------------------------
-FIREBASE_CRED_PATH = os.getenv("FIREBASE_CREDENTIALS_PATH")
-FIREBASE_DB_URL = os.getenv("FIREBASE_DATABASE_URL")
-STREAMLIT_APP_URL = os.getenv("STREAMLIT_APP_URL", "http://localhost:8501")
-POLL_INTERVAL_SECONDS = int(os.getenv("POLL_INTERVAL_SECONDS", "3"))
+
+import json
+import streamlit as st
+
+# Use secrets instead of local env vars
+try:
+    firebase_creds = json.loads(st.secrets["FIREBASE"]["CREDENTIALS_JSON"])
+    firebase_db_url = st.secrets["FIREBASE"]["DATABASE_URL"]
+except KeyError:
+    st.error("Firebase secrets not found! Make sure you configured them in Streamlit Cloud.")
+    st.stop()
+
+STREAMLIT_APP_URL = st.secrets.get("APP_URL", "http://localhost:8501")
+POLL_INTERVAL_SECONDS = int(st.secrets.get("POLL_INTERVAL_SECONDS", 3))
 
 SECTION_MAPPING = {
     "Segmentation": "section1",
@@ -74,11 +84,13 @@ def trigger_refresh():
 def init_firebase():
     if firebase_admin._apps:
         return
-    if not FIREBASE_CRED_PATH:
-        st.error("Firebase credentials path not set.")
+    try:
+        cred = credentials.Certificate(st.secrets["FIREBASE"]["CREDENTIALS_JSON"])
+        db_url = st.secrets["FIREBASE"]["DATABASE_URL"]
+    except KeyError:
+        st.error("Firebase secrets not found! Configure them in Streamlit Cloud.")
         st.stop()
-    cred = credentials.Certificate(FIREBASE_CRED_PATH)
-    db_url = FIREBASE_DB_URL or f"https://{cred._service_account_info.get('project_id')}.firebaseio.com"
+    
     firebase_admin.initialize_app(cred, {"databaseURL": db_url})
 
 def get_db_ref(path="/"):
