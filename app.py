@@ -58,7 +58,7 @@ except KeyError:
     st.stop()
 
 STREAMLIT_APP_URL = "https://spatial-mvp.streamlit.app/"
-POLL_INTERVAL_SECONDS = int(st.secrets.get("POLL_INTERVAL_SECONDS", 30))
+POLL_INTERVAL_SECONDS = int(st.secrets.get("POLL_INTERVAL_SECONDS", 600))
 
 SECTION_MAPPING = {
     "Segmentation": "section1",
@@ -492,15 +492,15 @@ with st.sidebar:
     st.image(render_qr(STREAMLIT_APP_URL), width=160)
     #st.write(f"App URL: {STREAMLIT_APP_URL}")
     st.markdown("---")
-    poll_interval = st.number_input("Auto-refresh interval (sec)", min_value=1, max_value=30, value=POLL_INTERVAL_SECONDS)
+    poll_interval = st.number_input("Auto-refresh interval (sec)", min_value=1, max_value=600, value=POLL_INTERVAL_SECONDS)
     st.markdown("---")
-    st.write("Admin:")
-    if st.button("Reset DB to defaults"):
-        root = get_db_ref("/")
-        root.child("sections").delete()
-        root.child("tools").delete()
-        seed_defaults_from_excel("tools.csv")
-        st.success("Reset DB and reseeded defaults.")
+    #st.write("Admin:")
+    #if st.button("Reset DB to defaults"):
+    #    root = get_db_ref("/")
+    #    root.child("sections").delete()
+    #    root.child("tools").delete()
+    #    seed_defaults_from_excel("tools.csv")
+    #    st.success("Reset DB and reseeded defaults.")
 
 # --- Auto-refresh ---
 from streamlit_autorefresh import st_autorefresh
