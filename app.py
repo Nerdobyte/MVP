@@ -58,7 +58,7 @@ except KeyError:
     st.stop()
 
 STREAMLIT_APP_URL = st.secrets.get("APP_URL", "http://localhost:8501")
-POLL_INTERVAL_SECONDS = int(st.secrets.get("POLL_INTERVAL_SECONDS", 3))
+POLL_INTERVAL_SECONDS = int(st.secrets.get("POLL_INTERVAL_SECONDS", 300))
 
 SECTION_MAPPING = {
     "Segmentation": "section1",
