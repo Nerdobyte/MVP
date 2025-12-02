@@ -521,40 +521,34 @@ with st.sidebar:
         )
 
     # --- Suggestion box ---
-    st.markdown('<p style="margin-bottom:0;font-weight:bold;">I\'ve got a suggestion!</p>', unsafe_allow_html=True)
-
-    # Initialize session_state key only if missing
+    # Initialize the key if it doesn't exist
     if "idea_note_input" not in st.session_state:
-        st.session_state["idea_note_input"] = ""
-
-    def reset_idea_note():
         st.session_state.idea_note_input = ""
 
+    def submit_note():
+        note = st.session_state.idea_note_input.strip()
+        if note:
+            reaction_ref.push({
+                "vibe": None,
+                "note": note,
+                "timestamp": datetime.now().isoformat()
+            })
+            st.toast("Note sent! 🚀", icon="💬")
+            st.session_state.idea_note_input = ""  # reset safely
+            st.experimental_rerun()  # forces the text area to clear
+        else:
+            st.warning("Type something before sending!")
+
+    st.markdown("**I've got a suggestion!**")
+
     with st.form("dev_feedback_form"):
-        idea_note = st.text_area(
+        st.text_area(
             "", 
-            placeholder="This is actually kinda fire... one thing I’d change is...", 
+            placeholder="This is actually kinda fire... one thing I’d change is...",
             height=100,
             key="idea_note_input"
         )
-
-        submitted = st.form_submit_button("Send note! 🚀", on_click=lambda: None)
-
-        if submitted:
-            note_text = st.session_state.idea_note_input.strip()
-            if note_text:
-                reaction_ref.push({
-                    "vibe": None,
-                    "note": note_text,
-                    "timestamp": datetime.now().isoformat()
-                })
-                st.toast("Note sent! 🚀", icon="💬")
-                
-                # Reset the text area **safely** via a callback using st.experimental_rerun
-                st.session_state.idea_note_input = ""
-                st.experimental_rerun()  # forces a clean rerun, safely clears the text area
-            else:
-                st.warning("Type something before sending!")
+        st.form_submit_button("Send note! 🚀", on_click=submit_note)
 
 
     poll_interval = st.number_input("Auto-refresh interval (sec)", min_value=1, max_value=600, value=POLL_INTERVAL_SECONDS)
