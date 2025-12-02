@@ -496,44 +496,40 @@ with st.sidebar:
     # --- Leave a note to Dev ---
     st.subheader("💬 Leave a note to the Dev")
 
-    # --- Quick reaction buttons ---
-    reaction_ref = get_db_ref("/dev_notes")  # Firebase reference
+    # --- Quick reactions ---
+    st.markdown("**Choose a reaction:**")
+    reactions = ["🔥 Love it!", "👍 Like it", "😵‍💫 Confused", "😐 Meh / could be better", "👎 Dislike"]
+    reaction = st.radio("", options=reactions, horizontal=True)
 
-    # Define emoji buttons only
-    reactions = ["🔥 Love it!", 
-                 "👍 Like it", 
-                 "😵‍💫 Confused", 
-                 "😐 Meh / could be better", 
-                 "👎 Dislike"]
-
-    st.markdown("**Choose your reaction:**")
-    cols = st.columns(len(reactions))
-    for idx, emoji in enumerate(reactions):
-        if cols[idx].button(emoji):
-            reaction_ref.push({
-                "vibe": emoji,
+    if st.button("React!"):
+        if reaction:
+            get_db_ref("/dev_notes").push({
+                "vibe": reaction,
                 "note": None,
                 "timestamp": datetime.now().isoformat()
             })
-            st.toast("Sent to Dev 🚀", icon="💬")
+            st.toast("Reaction sent! 🚀", icon="💬")
+        else:
+            st.warning("Pick a reaction before sending!")
 
-    # --- Idea / suggestion box ---
-    st.markdown("**I've got an idea / suggestion!**", unsafe_allow_html=True)
-    # immediately below, inside the same "flow"
+    st.markdown("---")  # separator
+
+    # --- Idea / suggestion ---
+    st.markdown("**I've got a suggestion!**")
     idea_note = st.text_area(
         "",
         placeholder="This is actually kinda fire... one thing I’d change is...",
         height=100
     )
 
-    if st.button("Send note"):
+    if st.button("Send note! 📄"):
         if idea_note.strip():
-            reaction_ref.push({
+            get_db_ref("/dev_notes").push({
                 "vibe": None,
                 "note": idea_note.strip(),
                 "timestamp": datetime.now().isoformat()
             })
-            st.toast("Sent to Dev 🚀", icon="💬")
+            st.toast("Note sent! 🚀", icon="💬")
         else:
             st.warning("Type something before sending!")
     
