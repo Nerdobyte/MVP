@@ -500,7 +500,7 @@ with st.sidebar:
     reaction_ref = get_db_ref("/dev_notes")
 
     reaction_buttons = ["🔥", "👍", "😵‍💫", "😐", "👎"]
-    reaction_labels = ["Love it!", "Like it", "Confused", "Meh / could be better", "Dislike"]
+    reaction_labels = ["Love it!", "Like it", "Confused", "Could be better", "Dislike"]
 
     cols = st.columns(len(reaction_buttons))
     for idx, emoji in enumerate(reaction_buttons):
