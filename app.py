@@ -496,42 +496,48 @@ with st.sidebar:
     # --- Leave a note to Dev ---
     st.subheader("💬 Leave a note to the Dev")
 
-    # --- Vibe check ---
-    st.markdown("**Vibe check:**")
-    vibe_options = [
-        "🔥 Love it!",
-        "👍 Like it",
-        "😵‍💫 Confused",
-        "😐 Meh / could be better",
-        "👎 Dislike"
+    # --- Quick reaction buttons ---
+    st.markdown("**Choose your reaction:**")
+
+    reactions = [
+        ("🔥 Love it!", "🔥"),
+        ("👍 Like it", "👍"),
+        ("😵 Confused", "😵‍💫"),
+        ("😐 Meh / could be better", "😐"),
+        ("👎 Dislike", "👎")
     ]
-    vibe = st.radio(
-        "",
-        options=vibe_options,
-        horizontal=True
-    )
 
-    # --- Idea / suggestion ---
-    st.markdown("**I've got an idea / suggestion!**")
-    idea_note = st.text_area(
-        "",
-        placeholder="This is actually kinda fire... one thing I’d change is...",
-        height=100
-    )
+    reaction_ref = get_db_ref("/dev_notes")  # Firebase reference
 
-    # --- Submit button ---
-    if st.button("Send note"):
-        if not vibe and not idea_note.strip():
-            st.warning("Pick a vibe or write a note 👀")
-        else:
-            notes_ref = get_db_ref("/dev_notes")
-            notes_ref.push({
-                "vibe": vibe if vibe else None,
-                "note": idea_note.strip() if idea_note.strip() else None,
+    # Render buttons horizontally
+    cols = st.columns(len(reactions))
+    for idx, (label, emoji) in enumerate(reactions):
+        if cols[idx].button(f"{emoji} {label}"):
+            reaction_ref.push({
+                "vibe": label,
+                "note": None,
                 "timestamp": datetime.now().isoformat()
             })
             st.toast("Sent to Dev 🚀", icon="💬")
 
+    # --- Idea / suggestion box ---
+    st.markdown("**I've got an idea / suggestion!**")
+    idea_note = st.text_area(
+        placeholder="This is actually kinda fire... one thing I’d change is...",
+        height=100
+    )
+
+    if st.button("Send note for your idea/suggestion"):
+        if idea_note.strip():
+            reaction_ref.push({
+                "vibe": None,
+                "note": idea_note.strip(),
+                "timestamp": datetime.now().isoformat()
+            })
+            st.toast("Sent to Dev 🚀", icon="💬")
+        else:
+            st.warning("Type something before sending!")
+    
     poll_interval = st.number_input("Auto-refresh interval (sec)", min_value=1, max_value=600, value=POLL_INTERVAL_SECONDS)
     st.markdown("---")
     #st.write("Admin:")
