@@ -545,17 +545,31 @@ def render_tool_row(tool_row, section_id=None, context=""):
 # ---------------------------
 # Tabs
 # ---------------------------
-tabs = st.tabs([
+# --- Persisted Tabs Fix ---
+TAB_NAMES = [
     "Dashboard",
     "Tag Explorer",
     "Overall Leaderboard",
     "Suggest Tool",
     "Manage Tools",
-    "Comments"  # NEW tab
-])
+    "Comments"
+]
+
+if "active_tab" not in st.session_state:
+    st.session_state.active_tab = "Dashboard"
+
+selected_tab = st.radio(
+    "Navigation",
+    TAB_NAMES,
+    index=TAB_NAMES.index(st.session_state.active_tab),
+    horizontal=True,
+    key="tab_selector"
+)
+
+st.session_state.active_tab = selected_tab
 
 # Dashboard Tab
-with tabs[0]:
+if selected_tab == "Dashboard":
     st.header("Live Dashboard — Sections & Leaderboards")
     st.caption(f"Last refreshed: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     
@@ -607,7 +621,7 @@ with tabs[0]:
 
 
 # Tag Explorer
-with tabs[1]:
+if selected_tab == "Tag Explorer":
     st.header("Explore tools by tags")
     all_tags = sorted({tg for t in tools_dict.values() for tg in t.get("tags", [])})
     selected_tags = st.multiselect("Filter by tags", all_tags)
@@ -621,7 +635,7 @@ with tabs[1]:
         render_tool_row(row, context="tag")
 
 # Overall Leaderboard
-with tabs[2]:
+if selected_tab == "Overall Leaderboard":
     st.header("Overall Leaderboard")
     if not tools_df.empty:
         fig = px.bar(tools_df.head(25), x="score", y="name", orientation="h", text="score")
@@ -633,7 +647,7 @@ with tabs[2]:
             render_tool_row(row, context="overall")
 
 # Suggest Tool tab
-with tabs[3]:
+if selected_tab == "Suggest Tool":
     st.header("Suggest a new tool")
     st.write("Propose a new tool and associate it with sections and tags.")
 
@@ -682,7 +696,7 @@ with tabs[3]:
                 trigger_refresh()
                 
 # Manage Tools tab
-with tabs[4]:  # new tab after Suggest Tool
+if selected_tab == "Manage Tools":  # new tab after Suggest Tool
     st.header("Manage Existing Tools")
     st.write("Edit tool name, tags, or associated sections.")
 
@@ -734,7 +748,7 @@ with tabs[4]:  # new tab after Suggest Tool
             trigger_refresh()
 
 # Comments Tab
-with tabs[5]:
+if selected_tab == "Comments":
     st.header("Audience Comments")
     
     # Select a tool
