@@ -450,7 +450,7 @@ if not st.session_state.consent_given:
 
 
 st.title("Spatial Multiomics Voting Platform — Live @ Conference")
-st.markdown("#### 🧠 A Platform for Spatial's Most Valuable Players... Presented at [BSI Congress 2025](https://www.bsicongress.com)")
+st.markdown("#### 🧠 Presented at [BSI Congress 2025](https://www.bsicongress.com)")
 
 # --- Firebase init & seeding ---
 try:
@@ -544,12 +544,12 @@ with st.sidebar:
     poll_interval = st.number_input("Auto-refresh interval (sec)", min_value=1, max_value=600, value=POLL_INTERVAL_SECONDS)
     st.markdown("---")
     #st.write("Admin:")
-    if st.button("Reset DB to defaults"):
-        root = get_db_ref("/")
-        root.child("sections").delete()
-        root.child("tools").delete()
-        seed_defaults_from_excel("tools.csv")
-        st.success("Reset DB and reseeded defaults.")
+    #if st.button("Reset DB to defaults"):
+    #    root = get_db_ref("/")
+    #    root.child("sections").delete()
+    #    root.child("tools").delete()
+    #    seed_defaults_from_excel("tools.csv")
+    #    st.success("Reset DB and reseeded defaults.")
 
 # --- Auto-refresh ---
 from streamlit_autorefresh import st_autorefresh
