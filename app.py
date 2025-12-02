@@ -523,6 +523,7 @@ with st.sidebar:
     # --- Idea / suggestion box ---
     st.markdown("**I've got an idea / suggestion!**")
     idea_note = st.text_area(
+        "",
         placeholder="This is actually kinda fire... one thing I’d change is...",
         height=100
     )
