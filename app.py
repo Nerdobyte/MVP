@@ -523,12 +523,14 @@ with st.sidebar:
     # --- Suggestion box ---
     st.markdown('<p style="margin-bottom:0;font-weight:bold;">I\'ve got a suggestion!</p>', unsafe_allow_html=True)
 
-    # Initialize session_state key only if missing (before form)
+    # Initialize session_state key only if missing
     if "idea_note_input" not in st.session_state:
         st.session_state["idea_note_input"] = ""
 
+    def reset_idea_note():
+        st.session_state.idea_note_input = ""
+
     with st.form("dev_feedback_form"):
-        # Text area uses session_state key directly
         idea_note = st.text_area(
             "", 
             placeholder="This is actually kinda fire... one thing I’d change is...", 
@@ -536,10 +538,9 @@ with st.sidebar:
             key="idea_note_input"
         )
 
-        submitted = st.form_submit_button("Send note! 🚀")
+        submitted = st.form_submit_button("Send note! 🚀", on_click=lambda: None)
 
         if submitted:
-            # Read the value directly from session_state key
             note_text = st.session_state.idea_note_input.strip()
             if note_text:
                 reaction_ref.push({
@@ -548,9 +549,10 @@ with st.sidebar:
                     "timestamp": datetime.now().isoformat()
                 })
                 st.toast("Note sent! 🚀", icon="💬")
-
-                # Clear the text area safely INSIDE the form
-                st.session_state["idea_note_input"] = ""  # ✅ safe
+                
+                # Reset the text area **safely** via a callback using st.experimental_rerun
+                st.session_state.idea_note_input = ""
+                st.experimental_rerun()  # forces a clean rerun, safely clears the text area
             else:
                 st.warning("Type something before sending!")
 
