@@ -495,8 +495,7 @@ with st.sidebar:
 
     # --- Leave a note to Dev ---
     st.subheader("💬 Leave a note to the Dev")
-
-    reactions = ["🔥 Love it!", "👍 Like it", "😵‍💫 Confused", "😐 Meh / could be better", "👎 Dislike"]
+    reactions = ["🔥 Love it!       ", "👍 Like it", "😵‍💫 Confused", "😐 Meh / could be better", "👎 Dislike"]
     reaction = st.radio("", options=reactions, horizontal=True)
 
     if st.button("React!"):
