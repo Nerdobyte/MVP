@@ -500,7 +500,11 @@ with st.sidebar:
     reaction_ref = get_db_ref("/dev_notes")  # Firebase reference
 
     # Define emoji buttons only
-    reactions = ["🔥", "👍", "😵‍💫", "😐", "👎"]
+    reactions = ["🔥 Love it!", 
+                 "👍 Like it", 
+                 "😵‍💫 Confused", 
+                 "😐 Meh / could be better", 
+                 "👎 Dislike"]
 
     st.markdown("**Choose your reaction:**")
     cols = st.columns(len(reactions))
@@ -514,7 +518,8 @@ with st.sidebar:
             st.toast("Sent to Dev 🚀", icon="💬")
 
     # --- Idea / suggestion box ---
-    st.markdown("**I've got an idea / suggestion!**")
+    st.markdown("**I've got an idea / suggestion!**", unsafe_allow_html=True)
+    # immediately below, inside the same "flow"
     idea_note = st.text_area(
         "",
         placeholder="This is actually kinda fire... one thing I’d change is...",
