@@ -492,47 +492,58 @@ with st.sidebar:
     st.image(render_qr(STREAMLIT_APP_URL), width=160)
     #st.write(f"App URL: {STREAMLIT_APP_URL}")
     st.markdown("---")
-    
-    # --- Leave a note to the dev (Gen Z style) ---
-    st.subheader("💬 Leave a note to the dev")
 
-    st.caption("Got thoughts? Hate it? Love it? Drop it here — they’ll actually see it 👀")
+    # --- Leave a note to Dev ---
+    st.subheader("💬 Leave a note to Dev")
 
-    dev_mood = st.radio(
-        "How does this app make you feel?",
-        [
-            "🤯 Mind blown",
-            "😍 Love it",
-            "🧠 Useful",
-            "🤨 Confusing",
-            "😴 Boring",
-            "💡 Gave me ideas",
-            "🔥 Needs to go viral"
-        ],
-        index=1
-    )
-
+    # Text area for optional note
     dev_note = st.text_area(
-        "Your note (max 300 characters)",
-        placeholder="e.g. this is actually kinda fire... one thing I’d love is...",
-        max_chars=300
+        "Tell me what you liked, hated, or want next 👀",
+        placeholder="e.g. this tool is 🔥 but needs dark mode…",
+        height=100
     )
 
-    if st.button("📩 Send note"):
-        if dev_note.strip() != "":
-            dev_ref = get_db_ref("/dev_notes")
+    # Map emojis to meanings
+    emoji_options = {
+        "🔥": "Love it",
+        "👍": "It's cool",
+        "😐": "Meh",
+        "😵‍💫": "Confused",
+        "🤔": "Idea / Suggestion"
+    }
 
-            dev_ref.push({
-                "mood": dev_mood,
-                "note": dev_note,
+    # Default selection
+    default_emoji = "🤔" if dev_note.strip() else None
+
+    # If user types, automatically set to Idea / Suggestion
+    if dev_note.strip():
+        selected_emoji = st.segmented_control(
+            "Vibe check (optional)",
+            options=list(emoji_options.keys()),
+            format_func=lambda e: f"{e} {emoji_options[e]}",
+            key="dev_emoji",
+            value="🤔"  # auto-select Idea/Suggestion
+        )
+    else:
+        selected_emoji = st.segmented_control(
+            "Vibe check (optional)",
+            options=list(emoji_options.keys()),
+            format_func=lambda e: f"{e} {emoji_options[e]}",
+            key="dev_emoji"
+        )
+
+    # Submit button
+    if st.button("Send note"):
+        if dev_note.strip() == "" and not selected_emoji:
+            st.warning("Drop a thought or pick a vibe 👀")
+        else:
+            notes_ref = get_db_ref("/dev_notes")
+            notes_ref.push({
+                "note": dev_note.strip() if dev_note.strip() != "" else None,
+                "reaction": selected_emoji if selected_emoji else None,
                 "timestamp": datetime.now().isoformat()
             })
-
-            st.success("Message sent — thank you 🫶")
-        else:
-            st.warning("Drop a message first 🙂")
-
-    st.markdown("---")
+            st.toast("Sent to Dev 🚀", icon="💬")
 
     poll_interval = st.number_input("Auto-refresh interval (sec)", min_value=1, max_value=600, value=POLL_INTERVAL_SECONDS)
     st.markdown("---")
