@@ -492,6 +492,48 @@ with st.sidebar:
     st.image(render_qr(STREAMLIT_APP_URL), width=160)
     #st.write(f"App URL: {STREAMLIT_APP_URL}")
     st.markdown("---")
+    
+    # --- Leave a note to the dev (Gen Z style) ---
+    st.subheader("💬 Leave a note to the dev")
+
+    st.caption("Got thoughts? Hate it? Love it? Drop it here — they’ll actually see it 👀")
+
+    dev_mood = st.radio(
+        "How does this app make you feel?",
+        [
+            "🤯 Mind blown",
+            "😍 Love it",
+            "🧠 Useful",
+            "🤨 Confusing",
+            "😴 Boring",
+            "💡 Gave me ideas",
+            "🔥 Needs to go viral"
+        ],
+        index=1
+    )
+
+    dev_note = st.text_area(
+        "Your note (max 300 characters)",
+        placeholder="e.g. this is actually kinda fire... one thing I’d love is...",
+        max_chars=300
+    )
+
+    if st.button("📩 Send note"):
+        if dev_note.strip() != "":
+            dev_ref = get_db_ref("/dev_notes")
+
+            dev_ref.push({
+                "mood": dev_mood,
+                "note": dev_note,
+                "timestamp": datetime.now().isoformat()
+            })
+
+            st.success("Message sent — thank you 🫶")
+        else:
+            st.warning("Drop a message first 🙂")
+
+    st.markdown("---")
+
     poll_interval = st.number_input("Auto-refresh interval (sec)", min_value=1, max_value=600, value=POLL_INTERVAL_SECONDS)
     st.markdown("---")
     #st.write("Admin:")
@@ -501,47 +543,6 @@ with st.sidebar:
         root.child("tools").delete()
         seed_defaults_from_excel("tools.csv")
         st.success("Reset DB and reseeded defaults.")
-
-# --- Leave a note to the dev (Gen Z style) ---
-st.subheader("💬 Leave a note to the dev")
-
-st.caption("Got thoughts? Hate it? Love it? Drop it here — they’ll actually see it 👀")
-
-dev_mood = st.radio(
-    "How does this app make you feel?",
-    [
-        "🤯 Mind blown",
-        "😍 Love it",
-        "🧠 Useful",
-        "🤨 Confusing",
-        "😴 Boring",
-        "💡 Gave me ideas",
-        "🔥 Needs to go viral"
-    ],
-    index=1
-)
-
-dev_note = st.text_area(
-    "Your note (max 300 characters)",
-    placeholder="e.g. this is actually kinda fire... one thing I’d love is...",
-    max_chars=300
-)
-
-if st.button("📩 Send note"):
-    if dev_note.strip() != "":
-        dev_ref = get_db_ref("/dev_notes")
-
-        dev_ref.push({
-            "mood": dev_mood,
-            "note": dev_note,
-            "timestamp": datetime.now().isoformat()
-        })
-
-        st.success("Message sent — thank you 🫶")
-    else:
-        st.warning("Drop a message first 🙂")
-
-st.markdown("---")
 
 # --- Auto-refresh ---
 from streamlit_autorefresh import st_autorefresh
