@@ -521,7 +521,7 @@ with st.sidebar:
         )
 
     # --- Suggestion box ---
-    # Initialize the key if it doesn't exist
+    # Initialize key if missing
     if "idea_note_input" not in st.session_state:
         st.session_state.idea_note_input = ""
 
@@ -534,8 +534,8 @@ with st.sidebar:
                 "timestamp": datetime.now().isoformat()
             })
             st.toast("Note sent! 🚀", icon="💬")
-            st.session_state.idea_note_input = ""  # reset safely
-            st.experimental_rerun()  # forces the text area to clear
+            # Reset the text area by updating the session_state key
+            st.session_state.idea_note_input = ""  
         else:
             st.warning("Type something before sending!")
 
