@@ -540,7 +540,7 @@ with st.sidebar:
             st.warning("Type something before sending!")
 
     st.markdown("---")
-    
+
     poll_interval = st.number_input("Auto-refresh interval (sec)", min_value=1, max_value=600, value=POLL_INTERVAL_SECONDS)
     st.markdown("---")
     #st.write("Admin:")
@@ -601,7 +601,7 @@ TAB_NAMES = [
     "Overall Leaderboard",
     "Suggest Tool",
     "Manage Tools",
-    "Comments"
+    "Write a tool review!"
 ]
 
 if "active_tab" not in st.session_state:
@@ -797,7 +797,7 @@ if selected_tab == "Manage Tools":  # new tab after Suggest Tool
             trigger_refresh()
 
 # Comments Tab
-if selected_tab == "Comments":
+if selected_tab == "Write a tool review!":
     st.header("Audience Comments")
     
     # Select a tool
