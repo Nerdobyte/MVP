@@ -520,32 +520,28 @@ with st.sidebar:
             unsafe_allow_html=True
         )
 
-    # --- Idea / suggestion ---
+    # --- Suggestion box ---
     st.markdown('<p style="margin-bottom:0;font-weight:bold;">I\'ve got a suggestion!</p>', unsafe_allow_html=True)
 
-    # Make sure the session_state key exists
-    if "idea_note_input" not in st.session_state:
-        st.session_state["idea_note_input"] = ""
+    with st.form("dev_feedback_form"):
+        idea_note = st.text_area(
+            "", 
+            placeholder="This is actually kinda fire... one thing I’d change is...", 
+            height=100
+        )
 
-    idea_note = st.text_area(
-        "", 
-        placeholder="This is actually kinda fire... one thing I’d change is...", 
-        height=100,
-        key="idea_note_input"  # assign a session_state key
-    )
-
-    if st.button("Send note! 🚀"):
-        if idea_note.strip():
-            reaction_ref.push({
-                "vibe": None,
-                "note": idea_note.strip(),
-                "timestamp": datetime.now().isoformat()
-            })
-            st.toast("Note sent! 🚀", icon="💬")
-            # reset the textbox safely
-            st.session_state["idea_note_input"] = ""
-        else:
-            st.warning("Type something before sending!")
+        submitted = st.form_submit_button("Send note! 🚀")
+        if submitted:
+            if idea_note.strip():
+                reaction_ref.push({
+                    "vibe": None,
+                    "note": idea_note.strip(),
+                    "timestamp": datetime.now().isoformat()
+                })
+                st.toast("Note sent! 🚀", icon="💬")
+                # After form submit, Streamlit automatically clears form inputs
+            else:
+                st.warning("Type something before sending!")
 
     st.markdown("---")
 
