@@ -494,34 +494,33 @@ with st.sidebar:
     st.markdown("---")
 
     # --- Leave a note to Dev ---
-    st.subheader("💬 Leave a note to the Dev")
-    reactions = ["🔥 Love it!       ", "👍 Like it", "😵‍💫 Confused", "😐 Meh / could be better", "👎 Dislike"]
-    reaction = st.radio("", options=reactions, horizontal=True)
+    st.subheader("💬 Leave a note to the Dev 🚀")
 
-    if st.button("React!"):
-        if reaction:
-            get_db_ref("/dev_notes").push({
-                "vibe": reaction,
+    # --- Quick reactions as buttons in a single line ---
+    st.markdown("**Choose a reaction:**")
+    reaction_ref = get_db_ref("/dev_notes")
+    reaction_buttons = ["🔥 Love it!", "👍 Like it", "😵‍💫 Confused", "😐 Meh / could be better", "👎 Dislike"]
+    cols = st.columns(len(reaction_buttons))
+    for idx, label in enumerate(reaction_buttons):
+        if cols[idx].button(label):
+            reaction_ref.push({
+                "vibe": label,
                 "note": None,
                 "timestamp": datetime.now().isoformat()
             })
             st.toast("Reaction sent! 🚀", icon="💬")
-        else:
-            st.warning("Pick a reaction before sending!")
-
-    st.markdown("---")  # separator
 
     # --- Idea / suggestion ---
-    st.markdown("**I've got a suggestion!**")
+    st.markdown('<p style="margin-bottom:0;font-weight:bold;">I\'ve got a suggestion!</p>', unsafe_allow_html=True)
     idea_note = st.text_area(
-        "",
-        placeholder="This is actually kinda fire... one thing I’d change is...",
+        "", 
+        placeholder="This is actually kinda fire... one thing I’d change is...", 
         height=100
     )
 
-    if st.button("Send note! 📄"):
+    if st.button("Send note! 📄🚀"):
         if idea_note.strip():
-            get_db_ref("/dev_notes").push({
+            reaction_ref.push({
                 "vibe": None,
                 "note": idea_note.strip(),
                 "timestamp": datetime.now().isoformat()
@@ -529,6 +528,7 @@ with st.sidebar:
             st.toast("Note sent! 🚀", icon="💬")
         else:
             st.warning("Type something before sending!")
+
     
     poll_interval = st.number_input("Auto-refresh interval (sec)", min_value=1, max_value=600, value=POLL_INTERVAL_SECONDS)
     st.markdown("---")
