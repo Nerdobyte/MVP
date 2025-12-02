@@ -503,44 +503,34 @@ with st.sidebar:
         height=100
     )
 
-    # Map emojis to meanings
+    # Emoji options with labels
     emoji_options = {
-        "🔥": "Love it",
-        "👍": "It's cool",
-        "😐": "Meh",
-        "😵‍💫": "Confused",
-        "🤔": "Idea / Suggestion"
+        "🔥 Love it": "Love it",
+        "👍 It's cool": "It's cool",
+        "😐 Meh": "Meh",
+        "😵‍💫 Confused": "Confused",
+        "🤔 Idea / Suggestion": "Idea / Suggestion"
     }
 
-    # Default selection
-    default_emoji = "🤔" if dev_note.strip() else None
+    # Default selection: Idea/Suggestion if they start typing
+    default_selection = "🤔 Idea / Suggestion" if dev_note.strip() else ""
 
-    # If user types, automatically set to Idea / Suggestion
-    if dev_note.strip():
-        selected_emoji = st.segmented_control(
-            "Vibe check (optional)",
-            options=list(emoji_options.keys()),
-            format_func=lambda e: f"{e} {emoji_options[e]}",
-            key="dev_emoji",
-            value="🤔"  # auto-select Idea/Suggestion
-        )
-    else:
-        selected_emoji = st.segmented_control(
-            "Vibe check (optional)",
-            options=list(emoji_options.keys()),
-            format_func=lambda e: f"{e} {emoji_options[e]}",
-            key="dev_emoji"
-        )
+    reaction = st.radio(
+        "Vibe check (optional):",
+        options=list(emoji_options.keys()),
+        index=list(emoji_options.keys()).index(default_selection) if default_selection else 0,
+        horizontal=True
+    )
 
     # Submit button
     if st.button("Send note"):
-        if dev_note.strip() == "" and not selected_emoji:
+        if dev_note.strip() == "" and reaction == "":
             st.warning("Drop a thought or pick a vibe 👀")
         else:
             notes_ref = get_db_ref("/dev_notes")
             notes_ref.push({
                 "note": dev_note.strip() if dev_note.strip() != "" else None,
-                "reaction": selected_emoji if selected_emoji else None,
+                "reaction": reaction if reaction != "" else None,
                 "timestamp": datetime.now().isoformat()
             })
             st.toast("Sent to Dev 🚀", icon="💬")
