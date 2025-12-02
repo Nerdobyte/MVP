@@ -523,10 +523,11 @@ with st.sidebar:
     # --- Suggestion box ---
     st.markdown('<p style="margin-bottom:0;font-weight:bold;">I\'ve got a suggestion!</p>', unsafe_allow_html=True)
 
-    with st.form("dev_feedback_form"):
-        if "idea_note_input" not in st.session_state:
-            st.session_state["idea_note_input"] = ""  # initialize once
+    # Initialize session_state key if missing
+    if "idea_note_input" not in st.session_state:
+        st.session_state["idea_note_input"] = ""
 
+    with st.form("dev_feedback_form"):
         idea_note = st.text_area(
             "", 
             placeholder="This is actually kinda fire... one thing I’d change is...", 
@@ -536,20 +537,17 @@ with st.sidebar:
 
         submitted = st.form_submit_button("Send note! 🚀")
         if submitted:
-            if idea_note.strip():
+            if st.session_state.idea_note_input.strip():  # always read from session_state
                 reaction_ref.push({
                     "vibe": None,
-                    "note": idea_note.strip(),
+                    "note": st.session_state.idea_note_input.strip(),
                     "timestamp": datetime.now().isoformat()
                 })
                 st.toast("Note sent! 🚀", icon="💬")
-                # CLEAR the textbox by resetting session_state key
-                st.session_state["idea_note_input"] = ""
+                # Reset text area safely inside the form submit
+                st.session_state.idea_note_input = ""
             else:
                 st.warning("Type something before sending!")
-
-    st.markdown("---")
-
 
     poll_interval = st.number_input("Auto-refresh interval (sec)", min_value=1, max_value=600, value=POLL_INTERVAL_SECONDS)
     st.markdown("---")
