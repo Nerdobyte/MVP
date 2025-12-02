@@ -500,7 +500,7 @@ with st.sidebar:
     reaction_ref = get_db_ref("/dev_notes")
 
     reaction_buttons = ["🔥", "👍", "😵‍💫", "😐", "👎"]
-    reaction_labels = ["Love it!", "Like it", "Confused", "Could be better", "Dislike"]
+    reaction_labels = ["Love it!", "Like it", "Confused", "Meh / could be better", "Dislike"]
 
     cols = st.columns(len(reaction_buttons))
     for idx, emoji in enumerate(reaction_buttons):
@@ -514,7 +514,11 @@ with st.sidebar:
             })
             st.toast(f"{reaction_labels[idx]} sent! 🚀", icon="💬")
         
-        lbl_col.markdown(f"{reaction_labels[idx]}")
+        # add small top margin to align with button
+        lbl_col.markdown(
+            f'<div style="margin-top:0.35em">{reaction_labels[idx]}</div>',
+            unsafe_allow_html=True
+        )
 
     # --- Idea / suggestion ---
     st.markdown('<p style="margin-bottom:0;font-weight:bold;">I\'ve got a suggestion!</p>', unsafe_allow_html=True)
