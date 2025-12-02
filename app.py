@@ -504,7 +504,9 @@ with st.sidebar:
 
     cols = st.columns(len(reaction_buttons))
     for idx, emoji in enumerate(reaction_buttons):
-        if cols[idx].button(emoji, key=f"reaction_{idx}"):
+        # split each slot into button + label horizontally
+        btn_col, lbl_col = st.columns([1, 2])
+        if btn_col.button(emoji, key=f"reaction_{idx}"):
             reaction_ref.push({
                 "vibe": reaction_labels[idx],
                 "note": None,
@@ -512,8 +514,7 @@ with st.sidebar:
             })
             st.toast(f"{reaction_labels[idx]} sent! 🚀", icon="💬")
         
-        # label under the button
-        cols[idx].caption(reaction_labels[idx])
+        lbl_col.markdown(f"{reaction_labels[idx]}")
 
     # --- Idea / suggestion ---
     st.markdown('<p style="margin-bottom:0;font-weight:bold;">I\'ve got a suggestion!</p>', unsafe_allow_html=True)
