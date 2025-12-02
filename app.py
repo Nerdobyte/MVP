@@ -496,15 +496,13 @@ with st.sidebar:
     # --- Leave a note to Dev ---
     st.subheader("💬 Leave a note to the Dev 🚀")
 
+    st.markdown("**Leave a reaction:**")
     reaction_ref = get_db_ref("/dev_notes")
 
-    # Reaction emojis only
     reaction_buttons = ["🔥", "👍", "😵‍💫", "😐", "👎"]
     reaction_labels = ["Love it!", "Like it", "Confused", "Meh / could be better", "Dislike"]
 
-    st.markdown("**Choose a reaction:**")
     cols = st.columns(len(reaction_buttons))
-
     for idx, emoji in enumerate(reaction_buttons):
         if cols[idx].button(emoji, key=f"reaction_{idx}"):
             reaction_ref.push({
@@ -513,6 +511,9 @@ with st.sidebar:
                 "timestamp": datetime.now().isoformat()
             })
             st.toast(f"{reaction_labels[idx]} sent! 🚀", icon="💬")
+        
+        # label under the button
+        cols[idx].caption(reaction_labels[idx])
 
     # --- Idea / suggestion ---
     st.markdown('<p style="margin-bottom:0;font-weight:bold;">I\'ve got a suggestion!</p>', unsafe_allow_html=True)
