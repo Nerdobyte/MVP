@@ -544,7 +544,7 @@ with st.sidebar:
     with st.form("dev_feedback_form"):
         st.text_area(
             "", 
-            placeholder="This is actually kinda fire... one thing I’d change is...",
+            placeholder="One thing I’d change is...",
             height=100,
             key="idea_note_input"
         )
