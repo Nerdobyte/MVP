@@ -523,6 +523,10 @@ with st.sidebar:
     # --- Idea / suggestion ---
     st.markdown('<p style="margin-bottom:0;font-weight:bold;">I\'ve got a suggestion!</p>', unsafe_allow_html=True)
 
+    # Make sure the session_state key exists
+    if "idea_note_input" not in st.session_state:
+        st.session_state["idea_note_input"] = ""
+
     idea_note = st.text_area(
         "", 
         placeholder="This is actually kinda fire... one thing I’d change is...", 
@@ -538,7 +542,7 @@ with st.sidebar:
                 "timestamp": datetime.now().isoformat()
             })
             st.toast("Note sent! 🚀", icon="💬")
-            # reset the textbox
+            # reset the textbox safely
             st.session_state["idea_note_input"] = ""
         else:
             st.warning("Type something before sending!")
