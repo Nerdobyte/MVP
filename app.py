@@ -494,43 +494,40 @@ with st.sidebar:
     st.markdown("---")
 
     # --- Leave a note to Dev ---
-    st.subheader("💬 Leave a note to Dev")
+    st.subheader("💬 Leave a note to the Dev")
 
-    # Text area for optional note
-    dev_note = st.text_area(
-        "Tell me what you liked, hated, or want next 👀",
-        placeholder="e.g. this tool is 🔥 but needs dark mode…",
-        height=100
-    )
-
-    # Emoji options with labels
-    emoji_options = {
-        "🔥 Love it": "Love it",
-        "👍 It's cool": "It's cool",
-        "😐 Meh": "Meh",
-        "😵‍💫 Confused": "Confused",
-        "🤔 Idea / Suggestion": "Idea / Suggestion"
-    }
-
-    # Default selection: Idea/Suggestion if they start typing
-    default_selection = "🤔 Idea / Suggestion" if dev_note.strip() else ""
-
-    reaction = st.radio(
-        "Vibe check (optional):",
-        options=list(emoji_options.keys()),
-        index=list(emoji_options.keys()).index(default_selection) if default_selection else 0,
+    # --- Vibe check ---
+    st.markdown("**Vibe check:**")
+    vibe_options = [
+        "🔥 Love it!",
+        "👍 Like it",
+        "😵‍💫 Confused",
+        "😐 Meh / could be better",
+        "👎 Dislike"
+    ]
+    vibe = st.radio(
+        "",
+        options=vibe_options,
         horizontal=True
     )
 
-    # Submit button
+    # --- Idea / suggestion ---
+    st.markdown("**I've got an idea / suggestion!**")
+    idea_note = st.text_area(
+        "",
+        placeholder="This is actually kinda fire... one thing I’d change is...",
+        height=100
+    )
+
+    # --- Submit button ---
     if st.button("Send note"):
-        if dev_note.strip() == "" and reaction == "":
-            st.warning("Drop a thought or pick a vibe 👀")
+        if not vibe and not idea_note.strip():
+            st.warning("Pick a vibe or write a note 👀")
         else:
             notes_ref = get_db_ref("/dev_notes")
             notes_ref.push({
-                "note": dev_note.strip() if dev_note.strip() != "" else None,
-                "reaction": reaction if reaction != "" else None,
+                "vibe": vibe if vibe else None,
+                "note": idea_note.strip() if idea_note.strip() else None,
                 "timestamp": datetime.now().isoformat()
             })
             st.toast("Sent to Dev 🚀", icon="💬")
