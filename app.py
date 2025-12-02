@@ -539,6 +539,7 @@ with st.sidebar:
         else:
             st.warning("Type something before sending!")
 
+    st.markdown("---")
     
     poll_interval = st.number_input("Auto-refresh interval (sec)", min_value=1, max_value=600, value=POLL_INTERVAL_SECONDS)
     st.markdown("---")
