@@ -496,19 +496,23 @@ with st.sidebar:
     # --- Leave a note to Dev ---
     st.subheader("💬 Leave a note to the Dev 🚀")
 
-    # --- Quick reactions as buttons in a single line ---
-    st.markdown("**Choose a reaction:**")
     reaction_ref = get_db_ref("/dev_notes")
-    reaction_buttons = ["🔥 Love it!", "👍 Like it", "😵‍💫 Confused", "😐 Meh / could be better", "👎 Dislike"]
+
+    # Reaction emojis only
+    reaction_buttons = ["🔥", "👍", "😵‍💫", "😐", "👎"]
+    reaction_labels = ["Love it!", "Like it", "Confused", "Meh / could be better", "Dislike"]
+
+    st.markdown("**Choose a reaction:**")
     cols = st.columns(len(reaction_buttons))
-    for idx, label in enumerate(reaction_buttons):
-        if cols[idx].button(label):
+
+    for idx, emoji in enumerate(reaction_buttons):
+        if cols[idx].button(emoji, key=f"reaction_{idx}"):
             reaction_ref.push({
-                "vibe": label,
+                "vibe": reaction_labels[idx],
                 "note": None,
                 "timestamp": datetime.now().isoformat()
             })
-            st.toast("Reaction sent! 🚀", icon="💬")
+            st.toast(f"{reaction_labels[idx]} sent! 🚀", icon="💬")
 
     # --- Idea / suggestion ---
     st.markdown('<p style="margin-bottom:0;font-weight:bold;">I\'ve got a suggestion!</p>', unsafe_allow_html=True)
