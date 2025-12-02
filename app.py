@@ -494,13 +494,13 @@ with st.sidebar:
     st.markdown("---")
 
     # --- Leave a note to Dev ---
-    st.subheader("💬 Leave a note to the Dev 🚀")
+    st.subheader("💬 Leave a note to the Dev")
 
-    st.markdown("**Leave a reaction:**")
+    st.markdown('<p style="margin-bottom:0; font-weight:bold; font-size:16px;">Leave a reaction:</p>', unsafe_allow_html=True)
     reaction_ref = get_db_ref("/dev_notes")
 
     reaction_buttons = ["🔥", "👍", "😵‍💫", "😐", "👎"]
-    reaction_labels = ["Love it!", "Like it", "Confused", "Meh / could be better", "Dislike"]
+    reaction_labels = ["Love it!", "Like it", "Confused", "Could be better", "Dislike"]
 
     cols = st.columns(len(reaction_buttons))
     for idx, emoji in enumerate(reaction_buttons):
@@ -528,7 +528,7 @@ with st.sidebar:
         height=100
     )
 
-    if st.button("Send note! 📄🚀"):
+    if st.button("Send note! 🚀"):
         if idea_note.strip():
             reaction_ref.push({
                 "vibe": None,
