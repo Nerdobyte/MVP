@@ -497,24 +497,17 @@ with st.sidebar:
     st.subheader("💬 Leave a note to the Dev")
 
     # --- Quick reaction buttons ---
-    st.markdown("**Choose your reaction:**")
-
-    reactions = [
-        ("🔥 Love it!", "🔥"),
-        ("👍 Like it", "👍"),
-        ("😵 Confused", "😵‍💫"),
-        ("😐 Meh / could be better", "😐"),
-        ("👎 Dislike", "👎")
-    ]
-
     reaction_ref = get_db_ref("/dev_notes")  # Firebase reference
 
-    # Render buttons horizontally
+    # Define emoji buttons only
+    reactions = ["🔥", "👍", "😵‍💫", "😐", "👎"]
+
+    st.markdown("**Choose your reaction:**")
     cols = st.columns(len(reactions))
-    for idx, (label, emoji) in enumerate(reactions):
-        if cols[idx].button(f"{emoji} {label}"):
+    for idx, emoji in enumerate(reactions):
+        if cols[idx].button(emoji):
             reaction_ref.push({
-                "vibe": label,
+                "vibe": emoji,
                 "note": None,
                 "timestamp": datetime.now().isoformat()
             })
@@ -528,7 +521,7 @@ with st.sidebar:
         height=100
     )
 
-    if st.button("Send note for your idea/suggestion"):
+    if st.button("Send note"):
         if idea_note.strip():
             reaction_ref.push({
                 "vibe": None,
